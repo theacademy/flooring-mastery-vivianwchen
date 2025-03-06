@@ -10,7 +10,6 @@ import java.util.List;
 public interface OrderDao {
     void loadOrders() throws IOException;
     Order addOrder(Order order) throws DaoPersistenceException;
-    LocalDate getOrderDate(String fileName);
     void writeOrders();
     List<Order> getOrdersByDate(LocalDate date);
     Order updateOrder(Order order);

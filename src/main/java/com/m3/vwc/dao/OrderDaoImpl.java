@@ -15,11 +15,21 @@ import java.util.*;
 @Component
 public class OrderDaoImpl implements OrderDao {
     private Map<LocalDate, List<Order>> orders = new HashMap<>();
-    private String folderPath = "src/main/resources/Orders";
+    private String folderPath;
+    private String backupFolderPath;
     public static final String DELIMITER = ",";
     private static int orderCounter = 0;
 
-    public OrderDaoImpl() {
+    public OrderDaoImpl(){
+        this.folderPath = "src/main/resources/Orders";
+        this.backupFolderPath = "src/main/resources/Backup";
+        loadOrders();
+
+    }
+    public OrderDaoImpl(String testFolderPath, String backupFolderPath) {
+        this.folderPath = testFolderPath;
+        this.backupFolderPath = backupFolderPath;
+
         loadOrders();
     }
     @Override
@@ -32,7 +42,9 @@ public class OrderDaoImpl implements OrderDao {
                     .forEach(file -> {
                         try {
                             List<String> lines = Files.readAllLines(file);
-                            LocalDate date = getOrderDate(file.getFileName().toString());
+
+                            String fileDate = file.getFileName().toString().substring(7, 15);
+                            LocalDate date = LocalDate.parse(fileDate, DateTimeFormatter.ofPattern("MMddyyyy"));
                             boolean isHeader = true;
                             for (String line : lines) {
                                 if (isHeader){
@@ -48,7 +60,6 @@ public class OrderDaoImpl implements OrderDao {
                             throw new DaoPersistenceException("Could not read order file: " + file.getFileName());
                         }
                     });
-            orderCounter++;
         } catch (IOException e) {
             throw new DaoPersistenceException("Could not find any orders.");
         }
@@ -57,21 +68,19 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public Order addOrder(Order order) throws DaoPersistenceException {
-        order.setOrderNumber(orderCounter++);
-        orders.computeIfAbsent(order.getOrderDate(), key -> new ArrayList()).add(order);
-        writeOrders();
+        if (order.getOrderNumber() == 0 || order.getOrderDate() == null) {
+            order.setOrderNumber(++orderCounter);
+        }
+        if (order.getOrderNumber() >= orderCounter - 1){
+            orders.computeIfAbsent(order.getOrderDate(), key -> new ArrayList()).add(order);
+            writeOrders();
+        }
         return order;
     }
 
-    @Override
-    public LocalDate getOrderDate(String fileName){
-        String date = fileName.substring(7, 15);
-        return LocalDate.parse(date, DateTimeFormatter.ofPattern("MMddyyyy"));
-    }
 
     @Override
     public void writeOrders() throws DaoPersistenceException {
-        String folderPath = "src/main/resources/Orders";
 
         for (LocalDate date : orders.keySet()) {
             String dateString = date.format(DateTimeFormatter.ofPattern("MMddyyyy"));
@@ -93,6 +102,7 @@ public class OrderDaoImpl implements OrderDao {
             }
         }
     }
+
     @Override
     public List<Order> getOrdersByDate(LocalDate date){
         return new ArrayList<>(orders.get(date));
@@ -134,7 +144,6 @@ public class OrderDaoImpl implements OrderDao {
     }
     @Override
     public void exportAllData() throws DaoPersistenceException {
-        String backupFolderPath = "src/main/resources/Backup";
         Path backupFolder = Paths.get(backupFolderPath);
         Path filePath = Paths.get(backupFolderPath, "DataExport.txt");
         boolean isOverwritten = false;
@@ -177,7 +186,7 @@ public class OrderDaoImpl implements OrderDao {
         }
     }
 
-    public String marshallOrder(Order order){
+    public String marshallOrder(Order order) {
         String orderAsText = order.getOrderNumber() + DELIMITER;
         orderAsText += order.getCustomerName() + DELIMITER;
         orderAsText += order.getState() + DELIMITER;
