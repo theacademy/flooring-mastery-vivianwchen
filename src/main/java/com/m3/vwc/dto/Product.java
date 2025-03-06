@@ -1,6 +1,7 @@
 package com.m3.vwc.dto;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public class Product {
     String productType;
@@ -32,4 +33,24 @@ public class Product {
         this.laborCostPerSqFt = laborCostPerSqFt;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return Objects.equals(productType, product.productType) && Objects.equals(costPerSqFt, product.costPerSqFt) && Objects.equals(laborCostPerSqFt, product.laborCostPerSqFt);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(productType, costPerSqFt, laborCostPerSqFt);
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "productType='" + productType + '\'' +
+                ", costPerSqFt=" + costPerSqFt +
+                ", laborCostPerSqFt=" + laborCostPerSqFt +
+                '}';
+    }
 }
