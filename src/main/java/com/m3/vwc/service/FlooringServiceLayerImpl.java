@@ -144,9 +144,8 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
         order.setLaborCostPerSquareFoot(currLaborCost);
         order.setTaxRate(currTaxRate);
 
-        BigDecimal taxRate = currTaxRate
-                .divide(new BigDecimal(100))
-                .setScale(2, RoundingMode.HALF_EVEN);
+        // Correct tax rate calculation
+        BigDecimal taxRate = currTaxRate.divide(new BigDecimal(100), 2, RoundingMode.HALF_EVEN);
 
         BigDecimal materialCost = order.getArea()
                 .multiply(currProductCost)
@@ -156,8 +155,9 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
                 .multiply(currLaborCost)
                 .setScale(2, RoundingMode.HALF_EVEN);
 
+        // Use taxRate instead of currTaxRate directly
         BigDecimal taxCost = (materialCost.add(laborCost))
-                .multiply(currTaxRate)
+                .multiply(taxRate)
                 .setScale(2, RoundingMode.HALF_EVEN);
 
         BigDecimal totalCost = (materialCost.add(laborCost)
@@ -171,6 +171,7 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
 
         return order;
     }
+
 
     @Override
     public Order getOrderByDateAndNumber(LocalDate date, int orderNum){
