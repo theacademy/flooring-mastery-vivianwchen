@@ -16,23 +16,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class FlooringServiceLayerImplTest {
     private FlooringServiceLayer testService;
-    private OrderDao orderDao;
 
     public FlooringServiceLayerImplTest() {
         ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
         testService = ctx.getBean("service", FlooringServiceLayer.class);
-        orderDao = ctx.getBean("orderDao", OrderDao.class);
     }
-    @BeforeEach
-    void setUp() {
-        AnnotationConfigApplicationContext appContext = new AnnotationConfigApplicationContext();
-        appContext.scan("com.m3.vwc");
-        appContext.refresh();
 
-        testService = appContext.getBean(FlooringServiceLayerImpl.class);
-        orderDao = appContext.getBean(OrderDaoImpl.class);
-        assertNotNull(testService, "Service should not be null");
-    }
     @Test
     void testValidateDateValid() throws InvalidInputException {
         LocalDate date = testService.validateDate("12/25/2025", true);
