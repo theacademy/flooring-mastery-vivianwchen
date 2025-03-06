@@ -186,6 +186,18 @@ public class OrderDaoImpl implements OrderDao {
         }
     }
 
+    @Override
+    public Order getOrderByDateAndNumber(LocalDate date, int orderNum){
+        List<Order> listOrder = orders.get(date);
+
+        for (Order order : listOrder) {
+            if (order.getOrderNumber() == orderNum) {
+                return order;
+            }
+        }
+        return null;
+    }
+
     public String marshallOrder(Order order) {
         String orderAsText = order.getOrderNumber() + DELIMITER;
         orderAsText += order.getCustomerName() + DELIMITER;

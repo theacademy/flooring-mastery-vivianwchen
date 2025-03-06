@@ -44,27 +44,33 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
 
     }
 
-    public LocalDate validateDate(String date) throws InvalidInputException{
+    @Override
+    public LocalDate validateDate(String date, boolean newOrder) throws InvalidInputException{
         try {
             LocalDate orderDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+            if (newOrder){
+                if (orderDate.isBefore(LocalDate.now())) {
+                    throw new InvalidInputException("Date must be in the future");
+                }
+            }
             return orderDate;
         } catch (DateTimeParseException e){
             throw new InvalidInputException("Invalid input. Please enter a valid date in mm/dd/yyyy format.");
         }
     }
-    @Override
-    public LocalDate validateNewDate(String date) throws InvalidInputException{
-        LocalDate orderDate = null;
-        try {
-            orderDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("MM/dd/yyyy"));
-            if (orderDate.isBefore(LocalDate.now())) {
-                throw new InvalidInputException("Date must be in the future");
-            }
-        } catch (DateTimeParseException e){
-            throw new InvalidInputException("Invalid input. Please enter a valid date in mm/dd/yyyy format.");
-        }
-        return orderDate;
-    }
+//    @Override
+//    public LocalDate validateNewDate(String date) throws InvalidInputException{
+//        LocalDate orderDate = null;
+//        try {
+//            orderDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+//            if (orderDate.isBefore(LocalDate.now())) {
+//                throw new InvalidInputException("Date must be in the future");
+//            }
+//        } catch (DateTimeParseException e){
+//            throw new InvalidInputException("Invalid input. Please enter a valid date in mm/dd/yyyy format.");
+//        }
+//        return orderDate;
+//    }
 
     public String validateName(String name, boolean allowEmpty) throws InvalidInputException{
         if (name.trim().isEmpty()){
@@ -190,6 +196,10 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
         return order;
     }
 
+    @Override
+    public Order getOrderByDateAndNumber(LocalDate date, int orderNum){
+        return orderDao.getOrderByDateAndNumber(date, orderNum);
+    }
     @Override
     public List<Product> getProducts(){
         return productDao.getAllProducts();

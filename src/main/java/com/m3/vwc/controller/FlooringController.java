@@ -27,12 +27,12 @@ public class FlooringController {
 
             switch(menuSelection){
                 case 1:
-                    LocalDate displayDate = getDate();
+                    LocalDate displayDate = getCurrentOrderDate();
                     List<Order> orderList = getAllOrdersForDate(displayDate);
                     displayOrders(orderList);
                     break;
                 case 2:
-                    LocalDate orderDate = getOrderDateInput();
+                    LocalDate orderDate = getNewOrderDateInput();
                     String customerName = getCustomerName();
                     String state = getState();
                     displayCurrentProducts();
@@ -45,9 +45,9 @@ public class FlooringController {
                     break;
                 case 3:
                     // Edit an Order
-                    LocalDate editDate = getDate();
+                    LocalDate editDate = getCurrentOrderDate();
                     int orderNum = getOrderNum();
-                    Order currOrder = getOrderByNum(editDate, orderNum);
+                    Order currOrder = getSpecificOrder(editDate, orderNum);
                     String newName = getUpdatedName(currOrder.getCustomerName());
                     String newState = getUpdatedState(currOrder.getState());
                     String newType = getUpdatedType(currOrder.getProductType());
@@ -63,11 +63,12 @@ public class FlooringController {
                     displayCurrentOrder(updatedOrder);
                     getSaveUpdatedData();
                     break;
+
                 case 4:
                     //Remove order
-                    LocalDate removalDate = getDate();
+                    LocalDate removalDate = getCurrentOrderDate();
                     int removalOrderNum = getOrderNum();
-                    Order removalOrder = getOrderByNum(removalDate, removalOrderNum);
+                    Order removalOrder = getSpecificOrder(removalDate, removalOrderNum);
                     displayCurrentOrder(removalOrder);
                     removeOrder(removalOrder);
                     break;
@@ -88,11 +89,11 @@ public class FlooringController {
         return order;
     }
 
-    public LocalDate getOrderDateInput(){
+    public LocalDate getNewOrderDateInput(){
         while(true){
             String dateInput = view.promptDate();
             try{
-                return service.validateNewDate(dateInput);
+                return service.validateDate(dateInput, true);
             }catch(InvalidInputException e){
                 view.displayMessage(e.getMessage());
             }
@@ -174,11 +175,11 @@ public class FlooringController {
         }
     }
 
-    public LocalDate getDate(){
+    public LocalDate getCurrentOrderDate(){
         while (true) {
             String date = view.promptDate();
             try{
-                return service.validateDate(date);
+                return service.validateDate(date, false);
             }catch(InvalidInputException e){
                 view.displayMessage(e.getMessage());
             }
@@ -216,17 +217,6 @@ public class FlooringController {
         }
 
     }
-    public Order getOrderByNum(LocalDate date, int orderNum){
-       List<Order> orderList = getAllOrdersForDate(date);
-       try{
-           return service.validateOrderExistsOnDate(orderList, orderNum);
-       }catch(InvalidInputException e){
-           view.displayMessage(e.getMessage());
-       }
-       return null;
-    }
-
-
 
     public String getUpdatedName(String name){
         while(true){
@@ -314,4 +304,7 @@ public class FlooringController {
         }
     }
 
+    public Order getSpecificOrder(LocalDate date,  int orderNum){
+        return service.getOrderByDateAndNumber(date, orderNum);
+    }
 }

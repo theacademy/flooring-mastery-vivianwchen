@@ -12,7 +12,9 @@ import java.util.*;
 @Component
 public class ProductDaoImpl implements ProductDao {
     HashMap<String, Product> products = new HashMap<>();
+    private String filePath;
     public ProductDaoImpl() throws DaoPersistenceException {
+        filePath = "src/main/resources/Data/Products.txt";
         try{
             loadProducts();
         }
@@ -20,11 +22,19 @@ public class ProductDaoImpl implements ProductDao {
             throw new DaoPersistenceException("Could not load product file.");
         }
     }
-
+    public ProductDaoImpl(String fileName){
+        filePath = fileName;
+        try{
+            loadProducts();
+        }
+        catch(IOException e){
+            throw new DaoPersistenceException("Could not load product file.");
+        }
+    }
     @Override
     public void loadProducts() throws IOException {
         Scanner sc = new Scanner(
-                new BufferedReader(new FileReader("src/main/resources/Data/Products.txt")));
+                new BufferedReader(new FileReader(filePath)));
         boolean header = true;
         if (sc.hasNextLine()) {
             sc.nextLine();

@@ -16,4 +16,5 @@ public interface OrderDao {
     Order removeOrder(Order order);
     void deleteOrderFile(LocalDate date) throws DaoPersistenceException;
     void exportAllData();
+    Order getOrderByDateAndNumber(LocalDate date, int orderNum);
 }

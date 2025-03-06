@@ -28,20 +28,18 @@ class OrderDaoImplTest {
       String backupFolderPath = "src/test/resources/Backup";
       String testFileName = "Orders_10232025.txt";
 
-      // Delete the specific test file if it exists
+      // Delete the specific test file if it exists so orders are not overwritten.
       Path testFilePath = Paths.get(testFolderPath, testFileName);
       if (Files.exists(testFilePath)) {
         Files.delete(testFilePath);
       }
 
       testOrderDao = new OrderDaoImpl(testFolderPath, backupFolderPath);
-
-      testOrderDao.loadOrders();
-
     }
 
     @Test
     void testLoadOrders() throws Exception {
+      testOrderDao.loadOrders();
       List<Order> orders = testOrderDao.getOrdersByDate(LocalDate.of(2013, 06, 02));
       assertEquals(2, orders.size());
     }
@@ -62,88 +60,24 @@ class OrderDaoImplTest {
       testOrder.setTotal(new BigDecimal("8505.27"));
       testOrderDao.addOrder(testOrder);
 
-      List<Order> orders = testOrderDao.getOrdersByDate(LocalDate.of(2025, 10, 23));
-      Order retrievedOrder = orders.stream()
-              .filter(order -> order.getOrderNumber() == 6)
-              .findFirst()
-              .orElse(null);
+      Order retrievedOrder = testOrderDao.getOrderByDateAndNumber(LocalDate.of(2025, 10, 23), 6);
+      assertNotNull(retrievedOrder, "Our retrieved order should be not be null");
 
-
-      assertEquals(testOrder.getOrderDate(), retrievedOrder.getOrderDate());
-      assertEquals(testOrder.getState(), retrievedOrder.getState());
-      assertEquals(testOrder.getOrderNumber(), retrievedOrder.getOrderNumber());
-      assertEquals(testOrder.getProductType(), retrievedOrder.getProductType());
-      assertEquals(testOrder.getMaterialCost(), retrievedOrder.getMaterialCost());
-      assertEquals(testOrder.getArea(), retrievedOrder.getArea());
-      assertEquals(testOrder.getTax(), retrievedOrder.getTax());
-      assertEquals(testOrder.getTotal(), retrievedOrder.getTotal());
-      assertEquals(testOrder.getTaxRate(), retrievedOrder.getTaxRate());
-      assertEquals(testOrder.getTotal(), retrievedOrder.getTotal());
-
+      assertEquals(testOrder.getOrderDate(), retrievedOrder.getOrderDate(), "Our retrieved order's date should be the same");
+      assertEquals(testOrder.getCustomerName(), retrievedOrder.getCustomerName(),  "Our retrieved order's customer name should be the same");
+      assertEquals(testOrder.getState(), retrievedOrder.getState(),  "Our retrieved order's state should be the same");
+      assertEquals(testOrder.getTaxRate(), retrievedOrder.getTaxRate(), "Our retrieved order's tax rate should be the same");
+      assertEquals(testOrder.getProductType(), retrievedOrder.getProductType(),  "Our retrieved order's product type should be the same");
+      assertEquals(testOrder.getArea(), retrievedOrder.getArea(), "Our retrieved order's area should be the same");
+      assertEquals(testOrder.getCostPerSquareFoot(), retrievedOrder.getCostPerSquareFoot(), "Our  retrieved order's cost per square foot should be the same");
+      assertEquals(testOrder.getLaborCostPerSquareFoot(), retrievedOrder.getLaborCostPerSquareFoot(), "Our  retrieved order's labor foot should be the same");
+      assertEquals(testOrder.getMaterialCost(), retrievedOrder.getMaterialCost(), "Our retrieved order's materialCost should be the same");
+      assertEquals(testOrder.getLaborCost(), retrievedOrder.getLaborCost(), "Our retrieved order's laborCost should be the same");
+      assertEquals(testOrder.getTax(), retrievedOrder.getTax(), "Our retrieved order's tax should be the same");
+      assertEquals(testOrder.getTotal(), retrievedOrder.getTotal(), "Our retrieved order's total should be the same");
+      assertEquals(testOrder.getOrderNumber(), retrievedOrder.getOrderNumber(),  "Our retrieved order's order number should be the same");
 
     }
-
-  @Test
-  void testGetOrdersByDate(){
-    Order testOrder = new Order(LocalDate.of(2025, 10, 23), "Snoopy", "TX", "Laminate", new BigDecimal("180"));
-    testOrder.setTaxRate(new BigDecimal("4.45"));
-    testOrder.setOrderNumber(6);
-    testOrder.setProductType("Tile");
-    testOrder.setMaterialCost(new BigDecimal("714.00"));
-    testOrder.setArea(new BigDecimal("204"));
-    testOrder.setCostPerSquareFoot(new BigDecimal("3.50"));
-    testOrder.setLaborCostPerSquareFoot(new BigDecimal("4.15"));
-    testOrder.setLaborCost(new BigDecimal("846.60"));
-    testOrder.setTax(new BigDecimal("600.00"));
-    testOrder.setTotal(new BigDecimal("8505.27"));
-    testOrderDao.addOrder(testOrder);
-
-    List<Order> orderList = testOrderDao.getOrdersByDate(LocalDate.of(2025, 10, 23));
-    assertEquals(orderList.get(0).getCustomerName(), "Snoopy");
-    assertEquals(orderList.size(), 1);
-  }
-  @Test
-  void testUpdateOrder() throws Exception {
-    Order testOrder = new Order(LocalDate.of(2025, 10, 23), "Snoopy", "TX", "Laminate", new BigDecimal("180"));
-    testOrder.setTaxRate(new BigDecimal("4.45"));
-    testOrder.setOrderNumber(6);
-    testOrder.setProductType("Tile");
-    testOrder.setMaterialCost(new BigDecimal("714.00"));
-    testOrder.setArea(new BigDecimal("204"));
-    testOrder.setCostPerSquareFoot(new BigDecimal("3.50"));
-    testOrder.setLaborCostPerSquareFoot(new BigDecimal("4.15"));
-    testOrder.setLaborCost(new BigDecimal("846.60"));
-    testOrder.setTax(new BigDecimal("600.00"));
-    testOrder.setTotal(new BigDecimal("8505.27"));
-    testOrderDao.addOrder(testOrder);
-
-    testOrder.setCustomerName("Charlie Brown");
-
-    testOrderDao.updateOrder(testOrder);
-
-    assertEquals(testOrder.getCustomerName(), "Charlie Brown");
-  }
-  @Test
-  public void testRemoveOrder() throws Exception {
-    Order testOrder = new Order(LocalDate.of(2025, 10, 23), "Snoopy", "TX", "Laminate", new BigDecimal("180"));
-    testOrder.setTaxRate(new BigDecimal("4.45"));
-    testOrder.setOrderNumber(6);
-    testOrder.setProductType("Tile");
-    testOrder.setMaterialCost(new BigDecimal("1.26"));
-    testOrder.setArea(new BigDecimal("204"));
-    testOrder.setCostPerSquareFoot(new BigDecimal("3.50"));
-    testOrder.setLaborCostPerSquareFoot(new BigDecimal("4.15"));
-    testOrder.setMaterialCost(new BigDecimal("714.00"));
-    testOrder.setLaborCost(new BigDecimal("846.60"));
-    testOrder.setTax(new BigDecimal("600.00"));
-    testOrder.setTotal(new BigDecimal("8505.27"));
-    testOrderDao.addOrder(testOrder);
-
-    Order removedOrder = testOrderDao.removeOrder(testOrder);
-    assertNotNull(removedOrder, "The removed over should not be null.");
-    assertEquals(testOrder, removedOrder, "The removed over should be the same object.");
-  }
-
   @Test
   void testWriteOrders() throws Exception {
     String testFolderPath = "src/test/resources/OrdersTest";
@@ -187,6 +121,70 @@ class OrderDaoImplTest {
   }
 
   @Test
+  void testGetOrdersByDate(){
+    Order testOrder = new Order(LocalDate.of(2025, 10, 23), "Snoopy", "TX", "Laminate", new BigDecimal("180"));
+    testOrder.setTaxRate(new BigDecimal("4.45"));
+    testOrder.setOrderNumber(6);
+    testOrder.setProductType("Tile");
+    testOrder.setMaterialCost(new BigDecimal("714.00"));
+    testOrder.setArea(new BigDecimal("204"));
+    testOrder.setCostPerSquareFoot(new BigDecimal("3.50"));
+    testOrder.setLaborCostPerSquareFoot(new BigDecimal("4.15"));
+    testOrder.setLaborCost(new BigDecimal("846.60"));
+    testOrder.setTax(new BigDecimal("600.00"));
+    testOrder.setTotal(new BigDecimal("8505.27"));
+    testOrderDao.addOrder(testOrder);
+
+    List<Order> orderList = testOrderDao.getOrdersByDate(LocalDate.of(2025, 10, 23));
+    assertEquals(orderList.get(0).getCustomerName(), "Snoopy");
+    assertEquals(orderList.size(), 1);
+  }
+  @Test
+  void testUpdateOrder() throws Exception {
+    Order testOrder = new Order(LocalDate.of(2025, 10, 23), "Snoopy", "TX", "Laminate", new BigDecimal("180"));
+    testOrder.setTaxRate(new BigDecimal("4.45"));
+    testOrder.setOrderNumber(6);
+    testOrder.setProductType("Wood");
+    testOrder.setMaterialCost(new BigDecimal("714.00"));
+    testOrder.setArea(new BigDecimal("204"));
+    testOrder.setCostPerSquareFoot(new BigDecimal("3.50"));
+    testOrder.setLaborCostPerSquareFoot(new BigDecimal("4.15"));
+    testOrder.setLaborCost(new BigDecimal("846.60"));
+    testOrder.setTax(new BigDecimal("600.00"));
+    testOrder.setTotal(new BigDecimal("8505.27"));
+    testOrderDao.addOrder(testOrder);
+
+    testOrder.setCustomerName("Charlie Brown");
+    testOrder.setProductType("Tile");
+
+    testOrderDao.updateOrder(testOrder);
+
+    assertEquals(testOrder.getCustomerName(), "Charlie Brown");
+    assertEquals(testOrder.getProductType(), "Tile");
+  }
+  @Test
+  void testRemoveOrder() throws Exception {
+    Order testOrder = new Order(LocalDate.of(2025, 10, 23), "Snoopy", "TX", "Laminate", new BigDecimal("180"));
+    testOrder.setTaxRate(new BigDecimal("4.45"));
+    testOrder.setOrderNumber(6);
+    testOrder.setProductType("Tile");
+    testOrder.setMaterialCost(new BigDecimal("1.26"));
+    testOrder.setArea(new BigDecimal("204"));
+    testOrder.setCostPerSquareFoot(new BigDecimal("3.50"));
+    testOrder.setLaborCostPerSquareFoot(new BigDecimal("4.15"));
+    testOrder.setMaterialCost(new BigDecimal("714.00"));
+    testOrder.setLaborCost(new BigDecimal("846.60"));
+    testOrder.setTax(new BigDecimal("600.00"));
+    testOrder.setTotal(new BigDecimal("8505.27"));
+    testOrderDao.addOrder(testOrder);
+
+    Order removedOrder = testOrderDao.removeOrder(testOrder);
+    assertNotNull(removedOrder, "The removed over should not be null.");
+    assertEquals(testOrder, removedOrder, "The removed over should be the same object.");
+  }
+
+
+  @Test
   void testExportAllData() throws DaoPersistenceException, IOException {
     String backupFolderPath = "src/test/resources/Backup";
     String exportFileName = "DataExport.txt";
@@ -207,7 +205,6 @@ class OrderDaoImplTest {
 
     testOrderDao.exportAllData();
 
-    System.out.println(exportFilePath);
     List<String> lines = Files.readAllLines(exportFilePath);
     assertTrue(Files.exists(exportFilePath));
 
@@ -216,11 +213,12 @@ class OrderDaoImplTest {
     String line1 = "6,Snoopy,TX,4.45,Tile,204,3.50,4.15,714.00,846.60,600.00,8505.27,2025-10-23";
     assertEquals(line1, lines.get(1));
 
-    String line2 = "2,Doctor Who,WA,9.25,Wood,243.00,5.15,4.75,1154.25,1251.45,216.51,2622.21,2013-06-02";
+    String line2 = "2,Doctor Who,WA,9.25,Wood,243.00,5.15,4.75,1251.45,1154.25,216.51,2622.21,2013-06-02";
     assertEquals(line2, lines.get(2));
 
-    String line3 = "3,Albert Einstein,KY,6.00,Carpet,217.00,2.25,2.10,455.70,488.25,56.64,1000.59,2013-06-02";
+    String line3 = "3,Albert Einstein,KY,6.00,Carpet,217.00,2.25,2.10,488.25,455.70,56.64,1000.59,2013-06-02";
     assertEquals(line3, lines.get(3));
   }
+
 
 }

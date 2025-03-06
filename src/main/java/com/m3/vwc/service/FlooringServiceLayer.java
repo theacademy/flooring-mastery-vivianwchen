@@ -7,7 +7,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface FlooringServiceLayer {
-    LocalDate validateNewDate(String date) throws InvalidInputException;
 
     String validateName(String name, boolean allowEmpty) throws InvalidInputException;
 
@@ -19,7 +18,7 @@ public interface FlooringServiceLayer {
 
     Order validateOrderExistsOnDate(List<Order> orderList, int orderNum) throws InvalidInputException;
 
-    LocalDate validateDate(String date) throws InvalidInputException;
+    LocalDate validateDate(String date, boolean newOrder) throws InvalidInputException;
 
     int validateOrderNum(String orderNum) throws InvalidInputException;
 
@@ -41,5 +40,6 @@ public interface FlooringServiceLayer {
 
     List<Product> getProducts();
 
+    Order getOrderByDateAndNumber(LocalDate date, int orderNum);
 }
 
