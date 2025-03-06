@@ -16,8 +16,6 @@ public interface FlooringServiceLayer {
 
     List<Order> validateOrderExists(LocalDate date) throws InvalidInputException;
 
-    Order validateOrderExistsOnDate(List<Order> orderList, int orderNum) throws InvalidInputException;
-
     LocalDate validateDate(String date, boolean newOrder) throws InvalidInputException;
 
     int validateOrderNum(String orderNum) throws InvalidInputException;
@@ -29,8 +27,6 @@ public interface FlooringServiceLayer {
     Order createNewOrder(LocalDate orderDate, String customerName, String state, String type, BigDecimal area);
 
     Order addOrderToList(Order order);
-
-    List<Order> getAllOrdersOnDate(LocalDate date);
 
     Order updateOrder(Order order);
 

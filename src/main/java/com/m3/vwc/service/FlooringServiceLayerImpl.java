@@ -12,13 +12,12 @@ import com.m3.vwc.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component
+
 public class FlooringServiceLayerImpl implements FlooringServiceLayer {
     private OrderDao orderDao;
     private TaxDao taxDao;
     private ProductDao productDao;
 
-    @Autowired
     public FlooringServiceLayerImpl(OrderDao orderDao, TaxDao taxDao, ProductDao productDao) {
         this.orderDao = orderDao;
         this.taxDao = taxDao;
@@ -32,16 +31,6 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
         catch(Exception e){
             throw new InvalidInputException("No orders exist for this date.");
         }
-    }
-
-    public Order validateOrderExistsOnDate(List<Order> orderList, int orderNum) throws InvalidInputException{
-        for (Order order : orderList) {
-            if (order.getOrderNumber() == orderNum){
-                return order;
-            }
-        }
-        throw new InvalidInputException("No orders exist for this date.");
-
     }
 
     @Override
@@ -58,19 +47,6 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
             throw new InvalidInputException("Invalid input. Please enter a valid date in mm/dd/yyyy format.");
         }
     }
-//    @Override
-//    public LocalDate validateNewDate(String date) throws InvalidInputException{
-//        LocalDate orderDate = null;
-//        try {
-//            orderDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("MM/dd/yyyy"));
-//            if (orderDate.isBefore(LocalDate.now())) {
-//                throw new InvalidInputException("Date must be in the future");
-//            }
-//        } catch (DateTimeParseException e){
-//            throw new InvalidInputException("Invalid input. Please enter a valid date in mm/dd/yyyy format.");
-//        }
-//        return orderDate;
-//    }
 
     public String validateName(String name, boolean allowEmpty) throws InvalidInputException{
         if (name.trim().isEmpty()){
@@ -209,11 +185,6 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
     @Override
     public Order addOrderToList(Order order){
         return orderDao.addOrder(order);
-    }
-
-    @Override
-    public List<Order> getAllOrdersOnDate(LocalDate date){
-        return orderDao.getOrdersByDate(date);
     }
 
     @Override

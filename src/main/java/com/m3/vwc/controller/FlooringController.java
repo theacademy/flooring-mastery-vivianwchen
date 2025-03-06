@@ -10,12 +10,10 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-@Component("controller")
 public class FlooringController {
     private FlooringView view;
     private FlooringServiceLayer service;
 
-    @Autowired
     FlooringController(FlooringView view, FlooringServiceLayer service){
         this.view = view;
         this.service = service;

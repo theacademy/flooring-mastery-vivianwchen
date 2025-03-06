@@ -20,6 +20,7 @@ class OrderDaoImplTest {
   private Order testOrder;
 
   public OrderDaoImplTest() {
+
   }
 
     @BeforeEach

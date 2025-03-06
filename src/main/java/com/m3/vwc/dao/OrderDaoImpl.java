@@ -12,7 +12,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-@Component
 public class OrderDaoImpl implements OrderDao {
     private Map<LocalDate, List<Order>> orders = new HashMap<>();
     private String folderPath;

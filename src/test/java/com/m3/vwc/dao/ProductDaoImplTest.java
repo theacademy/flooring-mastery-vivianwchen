@@ -3,6 +3,8 @@ package com.m3.vwc.dao;
 import com.m3.vwc.dto.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -11,12 +13,14 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ProductDaoImplTest {
-    private ProductDao testProductDao = new ProductDaoImpl();
+    private ProductDao testProductDao;
 
-    @BeforeEach
-    void setUp() throws DaoPersistenceException{
-        testProductDao = new ProductDaoImpl("src/test/resources/Data/Products.txt");
+
+    public ProductDaoImplTest() {
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+        testProductDao = ctx.getBean("productDao", ProductDaoImpl.class);
     }
+
     @Test
     void testloadProducts() throws DaoPersistenceException, IOException {
         testProductDao.loadProducts();

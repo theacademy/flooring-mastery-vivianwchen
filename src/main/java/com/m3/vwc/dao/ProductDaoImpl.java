@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
 
-@Component
 public class ProductDaoImpl implements ProductDao {
     HashMap<String, Product> products = new HashMap<>();
     private String filePath;

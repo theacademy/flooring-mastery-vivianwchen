@@ -9,11 +9,20 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
 
-@Component
 public class TaxDaoImpl implements TaxDao{
     Map<String, Tax> stateTaxes = new HashMap<>();
-
+    private String filePath;
     public TaxDaoImpl() throws DaoPersistenceException {
+        filePath = "src/test/resources/Data/Taxes.txt";
+        try{
+            loadTax();
+        }catch(IOException e){
+            throw new DaoPersistenceException("Could not load tax file.");
+        }
+    }
+
+    public TaxDaoImpl(String fileName) throws DaoPersistenceException {
+        filePath = fileName;
         try{
             loadTax();
         }catch(IOException e){
@@ -23,7 +32,7 @@ public class TaxDaoImpl implements TaxDao{
     @Override
     public void loadTax() throws IOException {
         Scanner sc = new Scanner(
-                new BufferedReader(new FileReader("src/main/resources/Data/Taxes.txt")));
+                new BufferedReader(new FileReader(filePath)));
         if (sc.hasNextLine()){
             sc.nextLine();
         }
