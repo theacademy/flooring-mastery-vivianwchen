@@ -64,7 +64,7 @@ public class FlooringController {
 
                         view.displayUpdatedOrderMsg();
                         displayCurrentOrder(updatedOrder);
-                        String userInput = getSaveUpdatedData();
+                        String userInput = getIfUserSavesUpdated();
                         updateEditedOrder(updatedOrder, userInput);
                     }
                     break;
@@ -76,7 +76,8 @@ public class FlooringController {
                     Order removalOrder = getSpecificOrder(removalDate, removalOrderNum);
                     if (removalOrder != null) {
                         displayCurrentOrder(removalOrder);
-                        removeOrder(removalOrder);
+                        String userInput = getIfUserRemovesOrder();
+                        removeOrder(removalOrder, userInput);
                     }
                     break;
                 case 5:
@@ -229,7 +230,6 @@ public class FlooringController {
     public String getUpdatedName(String name){
         while(true){
             String updatedName = view.promptUpdatedName(name);
-            System.out.println("Updated Name: " + updatedName);
             try{
                 return service.validateName(updatedName, true);
             }catch(InvalidInputException e){
@@ -271,7 +271,18 @@ public class FlooringController {
         }
     }
 
-    public String getSaveUpdatedData(){
+    public String getIfUserRemovesOrder(){
+        while (true){
+            String userInput = view.promptRemovalMsg();
+            try{
+                return service.validateUserYN(userInput);
+            }catch(InvalidInputException e){
+                view.displayMessage(e.getMessage());
+            }
+        }
+    }
+
+    public String getIfUserSavesUpdated(){
         while (true){
             String userInput = view.promptUseSaveData();
             try{
@@ -281,7 +292,6 @@ public class FlooringController {
             }
         }
     }
-
     public void updateEditedOrder(Order order, String userInput) {
         if (userInput.equalsIgnoreCase("Y")) {
             if (service.updateOrder(order) != null) {
@@ -292,9 +302,8 @@ public class FlooringController {
         }
 
     }
-    public void removeOrder(Order order){
-        String input = view.promptRemovalMsg();
-        if (input.equalsIgnoreCase("Y")){
+    public void removeOrder(Order order, String userInput){
+        if (userInput.equalsIgnoreCase("Y")){
             if (service.removeOrderFromList(order) != null){
                 view.displayRemovalSuccessMsg();
             }
