@@ -58,6 +58,7 @@ public class FlooringView {
     public void displayOrderSummary(Order order){
         io.print("  Customer: " + order.getCustomerName());
         io.print("      Date: " + order.getOrderDate());
+        io.print("      Order Number: " + order.getOrderNumber());
         io.print("      State: " + order.getState());
         io.print("      Product Type: " + order.getProductType());
         io.print("      Area: " + order.getArea());

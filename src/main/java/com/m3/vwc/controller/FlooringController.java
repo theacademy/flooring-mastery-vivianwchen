@@ -47,18 +47,21 @@ public class FlooringController {
                     LocalDate editDate = getCurrentOrderDate();
                     int orderNum = getOrderNum();
                     Order currOrder = getSpecificOrder(editDate, orderNum);
+                    displayCurrentOrder(currOrder);
                     if (currOrder != null) {
                         String newName = getUpdatedName(currOrder.getCustomerName());
                         String newState = getUpdatedState(currOrder.getState());
                         String newType = getUpdatedType(currOrder.getProductType());
                         BigDecimal newArea = getUpdatedArea(currOrder.getArea());
 
+                        System.out.println(newName + "  " + newState + " " + newType + " " + newArea);
 
                         String updatedName = newName.isEmpty() ? currOrder.getCustomerName() : newName;
                         String updatedState = newState.isEmpty() ? currOrder.getState() : newState;
                         String updatedType = newType.isEmpty() ? currOrder.getProductType() : newType;
                         BigDecimal updatedArea = (newArea.compareTo(BigDecimal.ZERO) == 0) ? currOrder.getArea() : newArea;
                         Order updatedOrder = createNewOrder(currOrder.getOrderDate(), updatedName, updatedState, updatedType, updatedArea);
+                        updatedOrder.setOrderNumber(currOrder.getOrderNumber());
                         view.displayUpdatedOrderMsg();
                         displayCurrentOrder(updatedOrder);
                         getSaveUpdatedData();
@@ -224,6 +227,7 @@ public class FlooringController {
     public String getUpdatedName(String name){
         while(true){
             String updatedName = view.promptUpdatedName(name);
+            System.out.println("Updated Name: " + updatedName);
             try{
                 return service.validateName(updatedName, true);
             }catch(InvalidInputException e){
@@ -236,7 +240,7 @@ public class FlooringController {
         while(true){
             String updatedState = view.promptUpdatedState(state);
             try{
-                return service.validateState(state, true);
+                return service.validateState(updatedState, true);
             }catch(InvalidInputException e){
                 view.displayMessage(e.getMessage());
             }
@@ -247,7 +251,7 @@ public class FlooringController {
         while (true){
             String updatedType = view.promptUpdatedType(type);
             try{
-                return service.validateProduct(type, true);
+                return service.validateProduct(updatedType, true);
             }catch(InvalidInputException e){
                 view.displayMessage(e.getMessage());
             }
