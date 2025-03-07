@@ -58,7 +58,6 @@ public class FlooringView {
     public void displayOrderSummary(Order order){
         io.print("  Customer: " + order.getCustomerName());
         io.print("      Date: " + order.getOrderDate());
-        io.print("      Order Number: " + order.getOrderNumber());
         io.print("      State: " + order.getState());
         io.print("      Product Type: " + order.getProductType());
         io.print("      Area: " + order.getArea());
@@ -83,11 +82,13 @@ public class FlooringView {
     public String promptUserPlaceOrder(){
         return io.readString("Would you like to place your order? y/n");
     }
+
     public void displayMessage(String message) {
         io.print(message);
     }
-    public void displayOrderSuccessMessage(){
-        io.print("Success! Order has been placed.");
+
+    public void displayOrderSuccessMessage(Order order){
+        io.print("Success! Order has been placed. Order Number #" + order.getOrderNumber());
     }
 
     public void displayOrderErrorMessage(){
@@ -152,5 +153,8 @@ public class FlooringView {
 
     public void displayOrderNotFound(){
         io.print("Order could not be found.");
+    }
+    public void displayUpdatingOrderMsg(){
+        io.print("Here is the order information to be updated:");
     }
 }

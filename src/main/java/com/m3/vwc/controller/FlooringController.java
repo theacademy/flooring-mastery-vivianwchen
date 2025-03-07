@@ -47,6 +47,7 @@ public class FlooringController {
                     LocalDate editDate = getCurrentOrderDate();
                     int orderNum = getOrderNum();
                     Order currOrder = getSpecificOrder(editDate, orderNum);
+                    displayUpdateOrderMsg();
                     displayCurrentOrder(currOrder);
                     if (currOrder != null) {
                         String newName = getUpdatedName(currOrder.getCustomerName());
@@ -54,17 +55,17 @@ public class FlooringController {
                         String newType = getUpdatedType(currOrder.getProductType());
                         BigDecimal newArea = getUpdatedArea(currOrder.getArea());
 
-                        System.out.println(newName + "  " + newState + " " + newType + " " + newArea);
-
                         String updatedName = newName.isEmpty() ? currOrder.getCustomerName() : newName;
                         String updatedState = newState.isEmpty() ? currOrder.getState() : newState;
                         String updatedType = newType.isEmpty() ? currOrder.getProductType() : newType;
                         BigDecimal updatedArea = (newArea.compareTo(BigDecimal.ZERO) == 0) ? currOrder.getArea() : newArea;
                         Order updatedOrder = createNewOrder(currOrder.getOrderDate(), updatedName, updatedState, updatedType, updatedArea);
                         updatedOrder.setOrderNumber(currOrder.getOrderNumber());
+
                         view.displayUpdatedOrderMsg();
                         displayCurrentOrder(updatedOrder);
-                        getSaveUpdatedData();
+                        String userInput = getSaveUpdatedData();
+                        updateEditedOrder(updatedOrder, userInput);
                     }
                     break;
 
@@ -170,7 +171,7 @@ public class FlooringController {
         String input = getUserYN();
         if (input.equalsIgnoreCase("Y")){
             if (service.addOrderToList(order) != null){
-                view.displayOrderSuccessMessage();
+                view.displayOrderSuccessMessage(order);
             }
             else{
                 view.displayOrderErrorMessage();
@@ -280,11 +281,13 @@ public class FlooringController {
         }
     }
 
-    public void updateEditedOrder(Order order){
-        if (service.updateOrder(order) != null){
-            view.displayUpdateSuccessMsg();
-        }else{
-         view.displayUpdateUnsuccessfulMsg();
+    public void updateEditedOrder(Order order, String userInput) {
+        if (userInput.equalsIgnoreCase("Y")) {
+            if (service.updateOrder(order) != null) {
+                view.displayUpdateSuccessMsg();
+            }
+        } else {
+            view.displayUpdateUnsuccessfulMsg();
         }
 
     }
@@ -319,5 +322,9 @@ public class FlooringController {
             view.displayMessage(e.getMessage());
         }
         return null;
+    }
+
+    public void displayUpdateOrderMsg(){
+        view.displayUpdatingOrderMsg();
     }
 }

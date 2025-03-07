@@ -108,12 +108,14 @@ public class OrderDaoImpl implements OrderDao {
             for (int i = 0; i < listOrder.size(); i++) {
                 if (listOrder.get(i).getOrderNumber() == order.getOrderNumber()) {
                     listOrder.set(i, order);
-                    return order;
+
+                    writeOrders();
+
                 }
             }
         }
-        writeOrders();
-        return null;
+
+        return order;
     }
 
     @Override
