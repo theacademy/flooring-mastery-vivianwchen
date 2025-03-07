@@ -154,7 +154,12 @@ public class FlooringView {
     public void displayOrderNotFound(){
         io.print("Order could not be found.");
     }
+
     public void displayUpdatingOrderMsg(){
         io.print("Here is the order information to be updated:");
+    }
+
+    public void displayExportSuccess(){
+        io.print("Success! The orders have been exported.");
     }
 }

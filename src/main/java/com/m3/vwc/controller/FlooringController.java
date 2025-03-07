@@ -82,6 +82,7 @@ public class FlooringController {
                 case 5:
                     // Export Data
                     exportData();
+
                     break;
                 case 6:
                     // Exit
@@ -309,6 +310,7 @@ public class FlooringController {
     public void exportData(){
         try {
             service.exportAllOrders();
+            view.displayExportSuccess();
         } catch(Exception e){
             view.displayMessage(e.getMessage());
         }
@@ -327,4 +329,5 @@ public class FlooringController {
     public void displayUpdateOrderMsg(){
         view.displayUpdatingOrderMsg();
     }
+
 }

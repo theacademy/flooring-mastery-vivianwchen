@@ -146,7 +146,7 @@ public class OrderDaoImpl implements OrderDao {
         try {
             Files.createDirectories(backupFolder);
 
-            boolean appendMode = Files.exists(filePath) && isOverwritten;
+            boolean appendMode = Files.exists(filePath);
 
             try (PrintWriter out = new PrintWriter(new FileWriter(filePath.toFile(), appendMode))) {
                 if (!appendMode) {
@@ -162,10 +162,8 @@ public class OrderDaoImpl implements OrderDao {
                 }
                 out.flush();
             }
-
-            isOverwritten= true;
         } catch (IOException e) {
-            throw new DaoPersistenceException("Could not export data.");
+            throw new DaoPersistenceException("Error. Could not export data.");
         }
     }
 
