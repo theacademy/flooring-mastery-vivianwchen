@@ -132,7 +132,7 @@ public class FlooringView {
     }
 
     public void displayUpdateUnsuccessfulMsg(){
-        io.print("Error. Order could not be updated.");
+        io.print("Order was not updated.");
     }
 
     public String promptRemovalMsg(){
@@ -145,10 +145,6 @@ public class FlooringView {
 
     public void displayRemovalUnsuccessfulMsg(){
         io.print("Order was not removed.");
-    }
-
-    public void displayRemovalErrorMsg(){
-        io.print("Error. Order could not be removed.");
     }
 
     public void displayOrderNotFound(){

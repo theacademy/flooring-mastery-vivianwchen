@@ -142,7 +142,6 @@ public class OrderDaoImpl implements OrderDao {
     public void exportAllData() throws DaoPersistenceException {
         Path backupFolder = Paths.get(backupFolderPath);
         Path filePath = Paths.get(backupFolderPath, "DataExport.txt");
-        boolean isOverwritten = false;
         try {
             Files.createDirectories(backupFolder);
 

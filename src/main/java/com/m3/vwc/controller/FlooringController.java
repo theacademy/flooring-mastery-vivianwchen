@@ -59,6 +59,7 @@ public class FlooringController {
                         String updatedState = newState.isEmpty() ? currOrder.getState() : newState;
                         String updatedType = newType.isEmpty() ? currOrder.getProductType() : newType;
                         BigDecimal updatedArea = (newArea.compareTo(BigDecimal.ZERO) == 0) ? currOrder.getArea() : newArea;
+
                         Order updatedOrder = createNewOrder(currOrder.getOrderDate(), updatedName, updatedState, updatedType, updatedArea);
                         updatedOrder.setOrderNumber(currOrder.getOrderNumber());
 
@@ -306,9 +307,6 @@ public class FlooringController {
         if (userInput.equalsIgnoreCase("Y")){
             if (service.removeOrderFromList(order) != null){
                 view.displayRemovalSuccessMsg();
-            }
-            else{
-                view.displayRemovalErrorMsg();
             }
         }
         else{
