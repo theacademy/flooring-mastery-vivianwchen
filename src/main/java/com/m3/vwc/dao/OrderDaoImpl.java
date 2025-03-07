@@ -184,17 +184,11 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public Order getOrderByDateAndNumber(LocalDate date, int orderNum){
-        List<Order> listOrder = orders.get(date);
-        if (listOrder != null) {
-
-
-            for (Order order : listOrder) {
-                if (order.getOrderNumber() == orderNum) {
-                    return order;
-                }
-            }
-        }
-        throw new DaoPersistenceException("Could not find order on " + date + " with Order Number " + orderNum);
+        return orders.getOrDefault(date, Collections.emptyList())
+                .stream()
+                .filter(order -> order.getOrderNumber() == orderNum)
+                .findFirst()
+                .orElseThrow(() -> new DaoPersistenceException("Could not find order on " + date + " with Order Number " + orderNum));
     }
 
     public String marshallOrder(Order order) {

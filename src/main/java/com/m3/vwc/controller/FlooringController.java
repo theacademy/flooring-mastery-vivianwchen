@@ -47,9 +47,9 @@ public class FlooringController {
                     LocalDate editDate = getCurrentOrderDate();
                     int orderNum = getOrderNum();
                     Order currOrder = getSpecificOrder(editDate, orderNum);
-                    displayUpdateOrderMsg();
-                    displayCurrentOrder(currOrder);
                     if (currOrder != null) {
+                        displayUpdateOrderMsg();
+                        displayCurrentOrder(currOrder);
                         String newName = getUpdatedName(currOrder.getCustomerName());
                         String newState = getUpdatedState(currOrder.getState());
                         String newType = getUpdatedType(currOrder.getProductType());
