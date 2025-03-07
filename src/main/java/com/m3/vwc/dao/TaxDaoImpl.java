@@ -3,6 +3,7 @@ package com.m3.vwc.dao;
 import com.m3.vwc.dto.*;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -12,14 +13,6 @@ import java.util.*;
 public class TaxDaoImpl implements TaxDao{
     Map<String, Tax> stateTaxes = new HashMap<>();
     private String filePath;
-    public TaxDaoImpl() throws DaoPersistenceException {
-        filePath = "src/test/resources/Data/Taxes.txt";
-        try{
-            loadTax();
-        }catch(IOException e){
-            throw new DaoPersistenceException("Could not load tax file.");
-        }
-    }
 
     public TaxDaoImpl(String fileName) throws DaoPersistenceException {
         filePath = fileName;
@@ -29,8 +22,10 @@ public class TaxDaoImpl implements TaxDao{
             throw new DaoPersistenceException("Could not load tax file.");
         }
     }
+
     @Override
     public void loadTax() throws IOException {
+
         Scanner sc = new Scanner(
                 new BufferedReader(new FileReader(filePath)));
         if (sc.hasNextLine()){

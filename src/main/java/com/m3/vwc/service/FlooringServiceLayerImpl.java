@@ -1,5 +1,6 @@
 package com.m3.vwc.service;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
@@ -134,7 +135,19 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
     }
 
     @Override
-    public Order createNewOrder(LocalDate orderDate, String customerName, String state, String type, BigDecimal area){
+    public Order createNewOrder(LocalDate orderDate, String customerName, String state, String type, BigDecimal area) throws DaoPersistenceException {
+//        try {
+//            taxDao.loadTax();
+//        } catch (IOException e) {
+//            throw new DaoPersistenceException("Failed to load tax information", e);
+//        }
+//
+//        try {
+//            productDao.loadProducts();
+//        } catch (IOException e) {
+//            throw new DaoPersistenceException("Failed to load products information", e);
+//        }
+        System.out.println(taxDao.getAllStateNames());
         Order order = new Order(orderDate, customerName, state, type, area);
         BigDecimal currProductCost = productDao.getProductCost(type);
         BigDecimal currLaborCost = productDao.getProductLaborCost(type);

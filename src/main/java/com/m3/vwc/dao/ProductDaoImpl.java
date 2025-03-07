@@ -12,15 +12,7 @@ import java.util.*;
 public class ProductDaoImpl implements ProductDao {
     HashMap<String, Product> products = new HashMap<>();
     private String filePath;
-    public ProductDaoImpl() throws DaoPersistenceException {
-        filePath = "src/main/resources/Data/Products.txt";
-        try{
-            loadProducts();
-        }
-        catch(IOException e){
-            throw new DaoPersistenceException("Could not load product file.");
-        }
-    }
+
     public ProductDaoImpl(String fileName){
         filePath = fileName;
         try{
@@ -30,6 +22,7 @@ public class ProductDaoImpl implements ProductDao {
             throw new DaoPersistenceException("Could not load product file.");
         }
     }
+
     @Override
     public void loadProducts() throws IOException {
         Scanner sc = new Scanner(
@@ -39,16 +32,12 @@ public class ProductDaoImpl implements ProductDao {
             sc.nextLine();
         }
         while (sc.hasNextLine()) {
-//            if (header) {
-//                header = false;
-//                continue;
-//            }
             String line = sc.nextLine();
             String[] parts = line.split(",");
             if (line.isEmpty()) {
                 continue;
             }
-            //System.out.println(parts[0] +  " " + parts[1] + " " + parts[2]);
+
             String type = parts[0].trim();
             BigDecimal costPerSqFt = new BigDecimal(parts[1].trim());
             BigDecimal laborCostPerSqFt = new BigDecimal(parts[2].trim());

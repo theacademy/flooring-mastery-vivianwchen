@@ -17,13 +17,20 @@
 
     <!-- Bean definitions go here -->
         <bean id="orderDao"
-              class="com.m3.vwc.dao.OrderDaoImpl"/>
+              class="com.m3.vwc.dao.OrderDaoImpl">
+            <constructor-arg value="src/main/resources/Orders" />
+            <constructor-arg value="src/main/resources/Backup" />
+        </bean>
 
         <bean id="productDao"
-              class="com.m3.vwc.dao.ProductDaoImpl"/>
+              class="com.m3.vwc.dao.ProductDaoImpl">
+            <constructor-arg value="src/main/resources/Data/Products.txt"/>
+        </bean>
 
         <bean id="taxDao"
-              class="com.m3.vwc.dao.TaxDaoImpl"/>
+              class="com.m3.vwc.dao.TaxDaoImpl">
+            <constructor-arg value="src/main/resources/Data/Taxes.txt"/>
+         </bean>
 
         <bean id="io" class="com.m3.vwc.ui.UserIOImpl"/>
 

@@ -19,14 +19,15 @@ public class OrderDaoImpl implements OrderDao {
     public static final String DELIMITER = ",";
     private static int orderCounter = 0;
 
-    public OrderDaoImpl(){
-        this.folderPath = "src/main/resources/Orders";
-        this.backupFolderPath = "src/main/resources/Backup";
-        loadOrders();
+//    public OrderDaoImpl(){
+//        this.folderPath = "src/main/resources/Orders";
+//        this.backupFolderPath = "src/main/resources/Backup";
+//        loadOrders();
+//
+//    }
 
-    }
-    public OrderDaoImpl(String testFolderPath, String backupFolderPath) {
-        this.folderPath = testFolderPath;
+    public OrderDaoImpl(String folderPath, String backupFolderPath) {
+        this.folderPath = folderPath;
         this.backupFolderPath = backupFolderPath;
 
         loadOrders();
