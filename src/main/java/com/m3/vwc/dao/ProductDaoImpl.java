@@ -13,6 +13,7 @@ public class ProductDaoImpl implements ProductDao {
     HashMap<String, Product> products = new HashMap<>();
     private String filePath;
     public static final String DELIMITER = ",";
+
     public ProductDaoImpl(String fileName){
         filePath = fileName;
         try{

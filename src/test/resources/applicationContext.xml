@@ -35,8 +35,8 @@
     <bean id="service"
           class="com.m3.vwc.service.FlooringServiceLayerImpl">
         <constructor-arg ref="orderDao"/>
-        <constructor-arg ref="productDao"/>
         <constructor-arg ref="taxDao"/>
+        <constructor-arg ref="productDao"/>
     </bean>
 
 </beans>
