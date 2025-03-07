@@ -14,7 +14,7 @@ public interface FlooringServiceLayer {
 
     String validateProduct(String type, boolean allowEmpty) throws InvalidInputException;
 
-    List<Order> validateOrderExists(LocalDate date) throws InvalidInputException;
+    List<Order> validateOrdersExists(LocalDate date) throws InvalidInputException;
 
     LocalDate validateDate(String date, boolean newOrder) throws InvalidInputException;
 

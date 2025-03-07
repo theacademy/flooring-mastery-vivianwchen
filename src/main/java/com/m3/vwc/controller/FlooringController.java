@@ -1,5 +1,6 @@
 package com.m3.vwc.controller;
 
+import com.m3.vwc.dao.DaoPersistenceException;
 import com.m3.vwc.ui.*;
 import com.m3.vwc.dto.*;
 import com.m3.vwc.service.*;
@@ -46,20 +47,22 @@ public class FlooringController {
                     LocalDate editDate = getCurrentOrderDate();
                     int orderNum = getOrderNum();
                     Order currOrder = getSpecificOrder(editDate, orderNum);
-                    String newName = getUpdatedName(currOrder.getCustomerName());
-                    String newState = getUpdatedState(currOrder.getState());
-                    String newType = getUpdatedType(currOrder.getProductType());
-                    BigDecimal newArea = getUpdatedArea(currOrder.getArea());
+                    if (currOrder != null) {
+                        String newName = getUpdatedName(currOrder.getCustomerName());
+                        String newState = getUpdatedState(currOrder.getState());
+                        String newType = getUpdatedType(currOrder.getProductType());
+                        BigDecimal newArea = getUpdatedArea(currOrder.getArea());
 
 
-                    String updatedName = newName.isEmpty() ? currOrder.getCustomerName() : newName;
-                    String updatedState = newState.isEmpty() ? currOrder.getState() : newState;
-                    String updatedType = newType.isEmpty() ? currOrder.getProductType() : newType;
-                    BigDecimal updatedArea = (newArea.compareTo(BigDecimal.ZERO) == 0) ? currOrder.getArea() : newArea;
-                    Order updatedOrder = createNewOrder(currOrder.getOrderDate(), updatedName, updatedState, updatedType, updatedArea);
-                    view.displayUpdatedOrderMsg();
-                    displayCurrentOrder(updatedOrder);
-                    getSaveUpdatedData();
+                        String updatedName = newName.isEmpty() ? currOrder.getCustomerName() : newName;
+                        String updatedState = newState.isEmpty() ? currOrder.getState() : newState;
+                        String updatedType = newType.isEmpty() ? currOrder.getProductType() : newType;
+                        BigDecimal updatedArea = (newArea.compareTo(BigDecimal.ZERO) == 0) ? currOrder.getArea() : newArea;
+                        Order updatedOrder = createNewOrder(currOrder.getOrderDate(), updatedName, updatedState, updatedType, updatedArea);
+                        view.displayUpdatedOrderMsg();
+                        displayCurrentOrder(updatedOrder);
+                        getSaveUpdatedData();
+                    }
                     break;
 
                 case 4:
@@ -67,8 +70,10 @@ public class FlooringController {
                     LocalDate removalDate = getCurrentOrderDate();
                     int removalOrderNum = getOrderNum();
                     Order removalOrder = getSpecificOrder(removalDate, removalOrderNum);
-                    displayCurrentOrder(removalOrder);
-                    removeOrder(removalOrder);
+                    if (removalOrder != null) {
+                        displayCurrentOrder(removalOrder);
+                        removeOrder(removalOrder);
+                    }
                     break;
                 case 5:
                     // Export Data
@@ -186,7 +191,7 @@ public class FlooringController {
 
     public List<Order> getAllOrdersForDate(LocalDate date){
         try{
-            return service.validateOrderExists(date);
+            return service.validateOrdersExists(date);
         }catch(Exception e){
             view.displayMessage(e.getMessage());
         }
@@ -303,6 +308,12 @@ public class FlooringController {
     }
 
     public Order getSpecificOrder(LocalDate date,  int orderNum){
-        return service.getOrderByDateAndNumber(date, orderNum);
+        try {
+            Order order = service.getOrderByDateAndNumber(date, orderNum);
+            return order;
+        }catch(DaoPersistenceException e){
+            view.displayMessage(e.getMessage());
+        }
+        return null;
     }
 }

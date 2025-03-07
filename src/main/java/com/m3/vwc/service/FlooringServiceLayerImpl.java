@@ -25,7 +25,8 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
         this.productDao = productDao;
     }
 
-    public List<Order> validateOrderExists(LocalDate date) throws InvalidInputException{
+    @Override
+    public List<Order> validateOrdersExists(LocalDate date) throws InvalidInputException{
         try{
             return orderDao.getOrdersByDate(date);
         }
@@ -49,6 +50,7 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
         }
     }
 
+    @Override
     public String validateName(String name, boolean allowEmpty) throws InvalidInputException{
         if (name.trim().isEmpty()){
             if (allowEmpty){
@@ -105,6 +107,8 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
         }
         return input;
     }
+
+    @Override
     public int validateOrderNum(String orderNum) throws InvalidInputException{
         try {
             return Integer.parseInt(orderNum);
@@ -113,6 +117,7 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
         }
     }
 
+    @Override
     public BigDecimal validateArea(String area, boolean allowEmpty) throws InvalidInputException{
         try{
             if (area.trim().isEmpty()){
@@ -136,18 +141,6 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
 
     @Override
     public Order createNewOrder(LocalDate orderDate, String customerName, String state, String type, BigDecimal area) throws DaoPersistenceException {
-//        try {
-//            taxDao.loadTax();
-//        } catch (IOException e) {
-//            throw new DaoPersistenceException("Failed to load tax information", e);
-//        }
-//
-//        try {
-//            productDao.loadProducts();
-//        } catch (IOException e) {
-//            throw new DaoPersistenceException("Failed to load products information", e);
-//        }
-        System.out.println(taxDao.getAllStateNames());
         Order order = new Order(orderDate, customerName, state, type, area);
         BigDecimal currProductCost = productDao.getProductCost(type);
         BigDecimal currLaborCost = productDao.getProductLaborCost(type);
@@ -185,16 +178,15 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
         return order;
     }
 
-
     @Override
     public Order getOrderByDateAndNumber(LocalDate date, int orderNum){
         return orderDao.getOrderByDateAndNumber(date, orderNum);
     }
+
     @Override
     public List<Product> getProducts(){
         return productDao.getAllProducts();
     }
-
 
     @Override
     public Order addOrderToList(Order order){

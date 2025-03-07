@@ -10,9 +10,14 @@ import java.util.List;
 
 public interface ProductDao {
     void loadProducts() throws IOException;
+
     Product getProduct(String productType);
+
     List<Product> getAllProducts();
+
     List<String> getAllProductNames();
+
     BigDecimal getProductCost(String productType);
+
     BigDecimal getProductLaborCost(String productType);
 }

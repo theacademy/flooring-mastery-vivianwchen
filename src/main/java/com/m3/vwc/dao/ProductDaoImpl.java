@@ -12,7 +12,7 @@ import java.util.*;
 public class ProductDaoImpl implements ProductDao {
     HashMap<String, Product> products = new HashMap<>();
     private String filePath;
-
+    public static final String DELIMITER = ",";
     public ProductDaoImpl(String fileName){
         filePath = fileName;
         try{
@@ -33,7 +33,7 @@ public class ProductDaoImpl implements ProductDao {
         }
         while (sc.hasNextLine()) {
             String line = sc.nextLine();
-            String[] parts = line.split(",");
+            String[] parts = line.split(DELIMITER);
             if (line.isEmpty()) {
                 continue;
             }
@@ -54,22 +54,24 @@ public class ProductDaoImpl implements ProductDao {
     public Product getProduct(String productType){
         return products.get(productType);
     }
+
     @Override
     public List<Product> getAllProducts(){
         return new ArrayList<>(products.values());
     }
+
     @Override
     public List<String> getAllProductNames() {
         return new ArrayList<>(products.keySet());
     }
+
     @Override
     public BigDecimal getProductCost(String productType){
         return products.get(productType).getCostPerSqFt();
     }
+
     @Override
     public BigDecimal getProductLaborCost(String productType){
         return products.get(productType).getLaborCostPerSqFt();
     }
-
-
 }

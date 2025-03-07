@@ -9,12 +9,20 @@ import java.util.List;
 
 public interface OrderDao {
     void loadOrders() throws IOException;
+
     Order addOrder(Order order) throws DaoPersistenceException;
+
     void writeOrders();
+
     List<Order> getOrdersByDate(LocalDate date);
+
     Order updateOrder(Order order);
+
     Order removeOrder(Order order);
+
     void deleteOrderFile(LocalDate date) throws DaoPersistenceException;
+
     void exportAllData();
+
     Order getOrderByDateAndNumber(LocalDate date, int orderNum);
 }

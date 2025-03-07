@@ -42,14 +42,17 @@ public class TaxDaoImpl implements TaxDao{
             stateTaxes.put(abbr, tax);
         }
     }
+
     @Override
     public Tax getTax(String state){
         return stateTaxes.get(state);
     }
+
     @Override
     public List<String> getAllStateNames() {
         return new ArrayList<>(stateTaxes.keySet());
     }
+
     @Override
     public BigDecimal getTaxRate(String state){
         return stateTaxes.get(state).getTaxRate();

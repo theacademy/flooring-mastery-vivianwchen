@@ -148,4 +148,8 @@ public class FlooringView {
     public void displayRemovalErrorMsg(){
         io.print("Error. Order could not be removed.");
     }
+
+    public void displayOrderNotFound(){
+        io.print("Order could not be found.");
+    }
 }

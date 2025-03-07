@@ -19,19 +19,13 @@ public class OrderDaoImpl implements OrderDao {
     public static final String DELIMITER = ",";
     private static int orderCounter = 0;
 
-//    public OrderDaoImpl(){
-//        this.folderPath = "src/main/resources/Orders";
-//        this.backupFolderPath = "src/main/resources/Backup";
-//        loadOrders();
-//
-//    }
-
     public OrderDaoImpl(String folderPath, String backupFolderPath) {
         this.folderPath = folderPath;
         this.backupFolderPath = backupFolderPath;
 
         loadOrders();
     }
+
     @Override
     public void loadOrders() throws DaoPersistenceException {
         orders.clear();
@@ -77,7 +71,6 @@ public class OrderDaoImpl implements OrderDao {
         }
         return order;
     }
-
 
     @Override
     public void writeOrders() throws DaoPersistenceException {
@@ -142,6 +135,7 @@ public class OrderDaoImpl implements OrderDao {
         writeOrders();
         return null;
     }
+
     @Override
     public void exportAllData() throws DaoPersistenceException {
         Path backupFolder = Paths.get(backupFolderPath);
@@ -195,7 +189,7 @@ public class OrderDaoImpl implements OrderDao {
                 return order;
             }
         }
-        return null;
+        throw new DaoPersistenceException("Could not find order on " + date + " with Order Number " + orderNum);
     }
 
     public String marshallOrder(Order order) {

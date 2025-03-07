@@ -40,21 +40,6 @@ public class UserIOImpl implements UserIO{
 
         return message;  // Return valid integer input
     }
-    public int readInt(String prompt){
-        print(prompt);
-        int input = sc.nextInt();
-        sc.nextLine();
-        return input;
-    }
-    public double readDouble(String prompt,double min){
-        print(prompt);
-        double message = sc.nextDouble();
-        while (message < min){
-            System.out.println("    Error: Please enter a number bigger than " + min);
-            message = sc.nextDouble();
-        }
-        sc.nextLine();
-        return message;
-    }
+
 
 }
